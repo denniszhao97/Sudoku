@@ -68,11 +68,11 @@ public class Sudoku implements Cloneable {
     /**
      * check if the sudoku is correct. 
      *
-     * @param skipZero 
+     * @param ignoreZero or not
      * @return if zero exits, return false 
      */
-    public boolean isCorrect(boolean skipZero) {
-    		if (!skipZero && !AllFilled()) {
+    public boolean isCorrect(boolean ignoreZero) {
+    		if (!ignoreZero && !AllFilled()) {
     			return false;
     		}
     		for (int i = 0; i < 9; i++) {
