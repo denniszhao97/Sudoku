@@ -8,14 +8,14 @@
  */
 public class Sudoku implements Cloneable {
 	
-    int[][] sudokuTable; // initialize the sudoku table as a matrix
+    int[][] sudokuArray; // initialize the sudoku table as a matrix
 
     /**
      * Set up the sudoku table 
      * @param table
      */
     public Sudoku(int[][] table) {
-    			sudokuTable = table;    		
+    			sudokuArray = table;    		
     }
    
     /**
@@ -23,7 +23,7 @@ public class Sudoku implements Cloneable {
      * @return sudokuTable
      */
     public int[][] getArray() {
-	     return sudokuTable.clone();
+	     return sudokuArray.clone();
     }
 
     /**
@@ -34,7 +34,7 @@ public class Sudoku implements Cloneable {
      */
     public int[][] getArray(boolean orginalReference) {
     		if (orginalReference) {
-         	    return sudokuTable;
+         	    return sudokuArray;
     		} else {
     			return getArray();
     		}
@@ -48,6 +48,80 @@ public class Sudoku implements Cloneable {
     public Sudoku copy() {
     		return new Sudoku(getArray());
     	}
+    
+
+    /**
+     * check if the table is filled. 
+     *
+     * @return true/false
+     */
+    public boolean AllFilled() {
+    		for (int a[] : sudokuArray) {
+    			for (int b : a) {
+    				if (b == 0) {
+    					return false;
+    				}
+    			}
+    		}
+    	return true;
+    }
+    /**
+     * check if the sudoku is correct. 
+     *
+     * @param skipZero 
+     * @return if zero exits, return false 
+     */
+    public boolean isCorrect(boolean skipZero) {
+    		if (!skipZero && !AllFilled()) {
+    			return false;
+    		}
+    		for (int i = 0; i < 9; i++) {
+    			for (int j = 0; j < 9; j++) {
+    				if (!isCorrect(i, j)) {
+    					return false;
+    				}
+    			}
+    		}
+    		return true;
+    	}
+
+    /**
+     * check whether the value at position (m,n) is correct or not. 
+     *
+     * @param m column 
+     * @param n row 
+     * @return true/false 
+     */
+    public boolean isCorrect(int x, int y) {
+    		if (sudokuArray[x][y] == 0) {
+    			return true;
+    		}
+    		// check col
+    		for (int col = 0; col < 9; col++) { 			
+    			if (sudokuArray[x][col] == sudokuArray[x][y] && (col != y)) {
+    				return false;
+    			}
+    		}
+       // check row
+    		for (int row = 0; row < 9; row++) {
+    			if (sudokuArray[row][y] == sudokuArray[x][y] && (row != x)) {
+    				return false;
+    			}
+    		}
+
+    		// check the larger 3*3 region but assign each subsection a id"a"
+	    int subgridrow = (x / 3) + 1;
+	    int subgridcol = (y / 3) + 1;
+	    
+		for (int i = (subgridrow-1)*3 ; i < subgridrow*3; i++) {
+			for (int j = (subgridcol-1)*3; j < subgridcol*3; j++) {
+				if (sudokuArray[i][j] == sudokuArray[x][y] && ( i != x && j!= y)) {
+					return false;
+				}
+			}
+		}
+	return true;
+    }
     
     /**
      * Solve the sudoku
@@ -69,7 +143,7 @@ public class Sudoku implements Cloneable {
 				
 				for (int i = 0; i < 9; i++) {
 					for (int j = 0; j < 9; j++) {
-						if (sudokuTable[i][j] == 0) {
+						if (sudokuArray[i][j] == 0) {
 							zeroPosition[length][0] = i;
 							zeroPosition[length][1] = j;
 							length++;
@@ -114,134 +188,6 @@ public class Sudoku implements Cloneable {
 		return null;
     	}
 
-    /**
-     * Set values for each position 
-     *
-     * @param n the value 
-     * @param x the column 
-     * @param y the row 
-     */
-    public void setArrayElement(int n, int x, int y) {
-	    sudokuTable[x][y] = n;
-    }
-
-    /**
-     * check if the sudoku is correct. 
-     *
-     * @param skipZero 
-     * @return if zero exits, return false 
-     */
-    public boolean isCorrect(boolean skipZero) {
-    		if (!skipZero && !AllFilled()) {
-    			return false;
-    		}
-    		for (int i = 0; i < 9; i++) {
-    			for (int j = 0; j < 9; j++) {
-    				if (!isCorrect(i, j)) {
-    					return false;
-    				}
-    			}
-    		}
-    		return true;
-    	}
-
-    /**
-     * check whether the value at position (m,n) is correct or not. 
-     *
-     * @param m column 
-     * @param n row 
-     * @return true/false 
-     */
-    public boolean isCorrect(int m, int n) {
-    		if (sudokuTable[m][n] == 0) {
-    			return true;
-    		}
-    		
-    		for (int i = 0; i < 9; i++) {
-    			if (i == n) {
-    				continue;
-    			}  			
-    			if (sudokuTable[m][i] == sudokuTable[m][n]) {
-    				return false;
-    			}
-    		}
-
-    		for (int i = 0; i < 9; i++) {
-    			if (i == m) {
-    				continue;
-    			}
-    			if (sudokuTable[i][n] == sudokuTable[m][n]) {
-    				return false;
-    			}
-    		}
-
-    		// check the larger 3*3 region but assign each subsection a id"a"
-		int a; 
-		if (m >= 0 && m <= 2 && n >= 0 && n <= 2) {
-		    a = 0;
-		} else if (m >= 0 && m <= 2 && n >= 3 && n <= 5) {
-		    a = 1;
-		} else if (m >= 0 && m <= 2 && n >= 6 && n <= 8) {
-		    a = 2;
-		} else if (m >= 3 && m <= 5 && n >= 0 && n <= 2) {
-		    a = 3;
-		} else if (m >= 3 && m <= 5 && n >= 3 && n <= 5) {
-		    a = 4;
-		} else if (m >= 3 && m <= 5 && n >= 6 && n <= 8) {
-		    a = 5;
-		} else if (m >= 6 && m <= 8 && n >= 0 && n <= 2) {
-		    a = 6;
-		} else if (m >= 6 && m <= 8 && n >= 3 && n <= 5) {
-		    a = 7;
-		} else {
-		    a = 8;
-		}
-		
-		for (int i = 0; i < 3; i++) {
-			for (int j = 0; j < 3; j++) {
-				int x = i + (a / 3) * 3;
-				int y = j + (a % 3) * 3;
-				if (x == m && y == n) {
-					continue;
-				}
-				if (sudokuTable[x][y] == sudokuTable[m][n]) {
-					return false;
-				}
-			}
-		}
-	return true;
-    }
-
-    /**
-     * check if the table is filled. 
-     *
-     * @return true/false
-     */
-    public boolean AllFilled() {
-    		for (int a[] : sudokuTable) {
-    			for (int b : a) {
-    				if (b == 0) {
-    					return false;
-    				}
-    			}
-    		}
-    	return true;
-    }
-
-    /**
-     * 
-     * The function convert the values in the matrix in string format.
-     * @return the matrix in string format 
-     */
-    public String toString() {
-    		StringBuilder StringOutput = new StringBuilder();
-    		for (int i = 0; i < 9; i++) {
-    			StringOutput.append(java.util.Arrays.toString(sudokuTable[i]));
-    			if (i != 8) {
-    				StringOutput.append("\n");
-    			}
-    		}
-    		return StringOutput.toString();
-    	}
+   
 
 }

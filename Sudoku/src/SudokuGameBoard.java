@@ -23,7 +23,7 @@ class SudokuWindow extends JFrame {
 
     //--------------------Buttons---------------------
     JMenuBar jmb = new JMenuBar(); 
-    JMenu jmGame = new JMenu("Game Menu");
+    JMenu jmGame = new JMenu("Game Menu"); 
     JMenu jmTest = new JMenu("Test Menu"); 
     JMenu jmTimer = new JMenu("00:00:00"); // timer
     JMenuItem jmiGameStart = new JMenuItems(this, "Start Game"); 
@@ -477,7 +477,7 @@ class Timer implements Runnable {
     private final SudokuWindow frame; 
 
     public Timer(SudokuWindow sw) {
-	frame = sw; 
+	frame = sw;
     }
 
  
@@ -498,4 +498,5 @@ class Timer implements Runnable {
 
     }
 }
+
 
