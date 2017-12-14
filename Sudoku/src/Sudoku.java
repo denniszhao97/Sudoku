@@ -99,23 +99,23 @@ public class Sudoku {
      * @param S the Sudoku player wants to solve
      * @return whether is solvable
      */
-    public boolean solve(Sudoku S) {
-    	    int[][] s = S.sudokuArray;
+    public boolean solve() {
+    	    int[][] a = this.sudokuArray;
     	    for (int i = 0; i < 9; i++) {
     	        for (int j = 0; j < 9; j++) {
-    	            if (s[i][j] != 0) {
+    	            if (a[i][j] != 0) {
     	                continue;
     	            }
     	            for (int value = 1; value <= 9; value++) {
-    	            	    s[i][j] = value;
+    	            	    a[i][j] = value;
     	                if (isCorrect(i, j)) {
-    	                    if (solve(this)) {
+    	                    if (solve()) {
     	                        return true;
     	                    } else {
-    	                        s[i][j] = 0;
+    	                        a[i][j] = 0;
     	                    }
     	                } else {
-    	                	  s[i][j] = 0;
+    	                	  a[i][j] = 0;
     	                }
     	            }
     	            return false;
@@ -127,7 +127,7 @@ public class Sudoku {
      * @return If solved, return the sudoku
      */
     public Sudoku solveSudoku() {
-        if(this.solve(this)) {
+        if(this.solve()) {
         	    return this;
         } else {
         	    return null;
