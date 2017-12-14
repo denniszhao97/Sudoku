@@ -81,7 +81,7 @@ public class Sudoku {
     /**
      * check if the sudoku is correct. 
      *
-     * @return if zero exits, return false 
+     * @return whether the sudoku is solved
      */
     public boolean FinalCheck() {
     		for (int i = 0; i < 9; i++) {
