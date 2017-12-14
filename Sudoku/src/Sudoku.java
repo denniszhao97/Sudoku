@@ -14,8 +14,8 @@ public class Sudoku {
      * Set up the sudoku table 
      * @param table
      */
-    public Sudoku(int[][] table) {
-    			sudokuArray = table;    		
+    public Sudoku(int[][] problem) {
+    			sudokuArray = problem;    		
     }
    
     /**
