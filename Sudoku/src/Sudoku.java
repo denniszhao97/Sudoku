@@ -41,25 +41,6 @@ public class Sudoku {
 		}
     	return true;
     }
-    /**
-     * check if the sudoku is correct. 
-     *
-     * @param ignoreZero or not
-     * @return if zero exits, return false 
-     */
-    public boolean isCorrect(boolean ignoreZero) {
-    		if (!ignoreZero && !AllFilled()) {
-    			return false;
-    		}
-    		for (int i = 0; i < 9; i++) {
-    			for (int j = 0; j < 9; j++) {
-    				if (!isCorrect(i, j)) {
-    					return false;
-    				}
-    			}
-    		}
-    		return true;
-    	}
 
     /**
      * check whether the value at position (x,y) is correct or not. 
@@ -69,9 +50,7 @@ public class Sudoku {
      * @return true/false 
      */
     public boolean isCorrect(int x, int y) {
-    		if (sudokuArray[x][y] == 0) {
-    			return true;   // allow you to generate random solvable sudoku
-    		}
+    	
     		// check col
     		for (int col = 0; col < 9; col++) { 			
     			if (sudokuArray[x][col] == sudokuArray[x][y] && (col != y)) {
@@ -99,7 +78,27 @@ public class Sudoku {
 	return true;
     }
     
-    // recursively call solve until every cell is not zero and follow the isCorrect rule;
+    /**
+     * check if the sudoku is correct. 
+     *
+     * @return if zero exits, return false 
+     */
+    public boolean FinalCheck() {
+    		for (int i = 0; i < 9; i++) {
+    			for (int j = 0; j < 9; j++) {
+    				if (!isCorrect(i, j)) {
+    					return false;
+    				}
+    			}
+    		}
+    		return true;
+    	}
+    
+    /**
+     * recursively call solve until every cell is not zero and follow the isCorrect rule;
+     * @param S the Sudoku player wants to solve
+     * @return whether is solvable
+     */
     public boolean solve(Sudoku S) {
     	    int[][] s = S.sudokuArray;
     	    for (int i = 0; i < 9; i++) {

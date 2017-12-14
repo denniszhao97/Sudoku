@@ -488,7 +488,7 @@ class Timer implements Runnable {
 	    dTime = System.currentTimeMillis() - time; 
 	    frame.jmTimer.setText(SudokuWindow.getTimeString(dTime)); //show how long has passed
 	    Sudoku s = new Sudoku(frame.getArray()); //create new Sudoku
-	    if (s.isCorrect(false)) {
+	    if (s.FinalCheck()) {
 		JOptionPane.showMessageDialog(frame, "Solved Successfully：" + SudokuWindow.getTimeString(dTime), "Congratulations！", JOptionPane.INFORMATION_MESSAGE);
 		
 		new JMenuItems(frame, "").endGame();
