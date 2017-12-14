@@ -64,7 +64,7 @@ public class Sudoku {
     			}
     		}
 
-    		// check the larger 3*3 region but assign each subsection a id"a"
+    		// check the 3x3 subgrid
 	    int subgridrow = (x / 3) + 1;
 	    int subgridcol = (y / 3) + 1;
 	    
