@@ -6,9 +6,9 @@
  * 
  * @author Zhonghao Zhao & Tianjiao Pu
  */
-public class Sudoku implements Cloneable {
+public class Sudoku {
 	
-    int[][] sudokuArray; // initialize the sudoku table as a matrix
+    public int[][] sudokuArray; // initialize the sudoku table as a matrix
 
     /**
      * Set up the sudoku table 
@@ -23,32 +23,8 @@ public class Sudoku implements Cloneable {
      * @return sudokuTable
      */
     public int[][] getArray() {
-	     return sudokuArray.clone();
+	     return sudokuArray;
     }
-
-    /**
-     * Obtain the array 
-     *
-     * @param orginalReference 
-     * @return sudokuTable(true)， getArray(false)
-     */
-    public int[][] getArray(boolean orginalReference) {
-    		if (orginalReference) {
-         	    return sudokuArray;
-    		} else {
-    			return getArray();
-    		}
-    }
-    
-    /**
-     * copy the new sudoku 
-     *
-     * @return sudoku 
-     */
-    public Sudoku copy() {
-    		return new Sudoku(getArray());
-    	}
-    
 
     /**
      * check if the table is filled. 
@@ -86,15 +62,15 @@ public class Sudoku implements Cloneable {
     	}
 
     /**
-     * check whether the value at position (m,n) is correct or not. 
+     * check whether the value at position (x,y) is correct or not. 
      *
-     * @param m column 
-     * @param n row 
+     * @param y column 
+     * @param x row 
      * @return true/false 
      */
     public boolean isCorrect(int x, int y) {
     		if (sudokuArray[x][y] == 0) {
-    			return true;
+    			return true;   // allow you to generate random solvable sudoku
     		}
     		// check col
     		for (int col = 0; col < 9; col++) { 			
@@ -123,71 +99,39 @@ public class Sudoku implements Cloneable {
 	return true;
     }
     
+    // recursively call solve until every cell is not zero and follow the isCorrect rule;
+    public boolean solve(Sudoku S) {
+    	    int[][] s = S.sudokuArray;
+    	    for (int i = 0; i < 9; i++) {
+    	        for (int j = 0; j < 9; j++) {
+    	            if (s[i][j] != 0) {
+    	                continue;
+    	            }
+    	            for (int value = 1; value <= 9; value++) {
+    	            	    s[i][j] = value;
+    	                if (isCorrect(i, j)) {
+    	                    if (solve(this)) {
+    	                        return true;
+    	                    } else {
+    	                        s[i][j] = 0;
+    	                    }
+    	                } else {
+    	                	  s[i][j] = 0;
+    	                }
+    	            }
+    	            return false;
+    	        }
+    	    }
+    	    return true;
+    }
     /**
-     * Solve the sudoku
-     * Backtracking Algorithm is applied in this case.
-     *
-     * @return If the solution is valid, return the new sudoku object
-     * otherwise, return null 
+     * @return If solved, return the sudoku
      */
     public Sudoku solveSudoku() {
-    	
-	if (!isCorrect(true)) { 
-	    return null;
-		} else if (isCorrect(false)) { 
-			return this.copy();
-			} else { 
-				int length = 0;
-				int[][] zeroPosition = new int[81][2]; 
-				// in the worst case, there are 81 zeros
-				
-				for (int i = 0; i < 9; i++) {
-					for (int j = 0; j < 9; j++) {
-						if (sudokuArray[i][j] == 0) {
-							zeroPosition[length][0] = i;
-							zeroPosition[length][1] = j;
-							length++;
-						}
-					}
-				}
-				
-				//copy a new sudoku(buffer) to work on the solution
-				Sudoku tempSudoku = this.copy(); 
-				int[][] tempArray = tempSudoku.getArray(true);
-	    
-				for (int i = 0; i < length && i >= 0; i++) {
-					for (int j = tempArray[zeroPosition[i][0]][zeroPosition[i][1]] + 1; j <= 9; j++) {
-						tempArray[zeroPosition[i][0]][zeroPosition[i][1]] = j;
-						if (tempSudoku.isCorrect(zeroPosition[i][0], zeroPosition[i][1])) { 
-							//if the values are correct, stop.
-							break;
-						}
-	    			
-						if (j == 9 && !tempSudoku.isCorrect(zeroPosition[i][0], zeroPosition[i][1])) { 
-							//if the values are not correct, and all numbers are used, 
-							//adjust from the last value that is not 9 
-							tempArray[zeroPosition[i][0]][zeroPosition[i][1]] = 0;
-							i--;
-							for (; i >= 0; i--) {
-								//if 9 is reached, change it into 0
-								if (tempArray[zeroPosition[i][0]][zeroPosition[i][1]] == 9) { 
-									tempArray[zeroPosition[i][0]][zeroPosition[i][1]] = 0;
-								} else {
-									break;
-								}
-							}
-							i--;
-							break;
-						}
-					}
-				}
-				if (tempSudoku.isCorrect(false)) {
-					return tempSudoku;
-				}
-			}
-		return null;
+        if(this.solve(this)) {
+        	    return this;
+        } else {
+        	    return null;
+        }
     	}
-
-   
-
 }

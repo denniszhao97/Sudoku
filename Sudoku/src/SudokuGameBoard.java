@@ -246,7 +246,7 @@ class JMenuItems extends JMenuItem implements ActionListener {
 		int rnd = (int) (Math.random() * rndPower); 
 		if (rnd == 0) { 
 		    Sudoku s = new Sudoku(frame.getArray());
-		    int[][] n = s.getArray(true); 
+		    int[][] n = s.sudokuArray; 
 		    int counter = 0; 
 		    
 		    while ((s.isCorrect(i, j) && s.solveSudoku() != null) == false) { //The generated Sudoku must be solvable
