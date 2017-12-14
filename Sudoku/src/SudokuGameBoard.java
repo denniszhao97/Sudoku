@@ -248,17 +248,17 @@ class JMenuItems extends JMenuItem implements ActionListener {
 		    Sudoku s = new Sudoku(frame.getArray());
 		    int[][] n = s.sudokuArray; 
 		    int counter = 0; 
-		    
-		    while ((s.isCorrect(i, j) && s.solveSudoku() != null) == false) { //The generated Sudoku must be solvable
-			     int value = (int) (Math.random() * 9) + 1; 
+		    do {
+		    	 int value = (int) (Math.random() * 9) + 1; 
 			     n[i][j] = value;
 			     counter++; 
 			     if (counter > 100) { 
 			     n[i][j] = 0; 
 			    
 			     break;
-			}
-		    } 
+				}
+			    } while (!(s.isCorrect(i, j) && s.solveSudoku() != null)); //The generated Sudoku must be solvable to end the circle;
+			     
 		    if (n[i][j] != 0) { 
 			frame.np[i][j].setNumber(n[i][j]); 
 			frame.np[i][j].setEvent(false); 

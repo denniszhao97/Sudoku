@@ -32,13 +32,13 @@ public class Sudoku {
      * @return true/false
      */
     public boolean AllFilled() {
-    		for (int a[] : sudokuArray) {
-    			for (int b : a) {
-    				if (b == 0) {
-    					return false;
-    				}
-    			}
-    		}
+    	   for (int i = 0; i < 9; i++) {
+			for (int j = 0; j < 9; j++) {
+				if (this.sudokuArray[i][j] == 0) {
+					return false;
+				}
+			}
+		}
     	return true;
     }
     /**
